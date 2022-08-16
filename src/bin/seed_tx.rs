@@ -19,6 +19,11 @@ fn main() {
     let rx_account = Uuid::from_str(&args[1].as_str()).unwrap();
     let amount: i64 = args[2].parse().unwrap();
 
+    if amount > 100 {
+        eprintln!("Requested amount over the limit!");
+        return;
+    }
+
     let seed_account_id = seed_account_id();
     let msg = ClientMessage::CreateTransaction { sender_id: seed_account_id, receiver_id: rx_account, amount: amount };
 

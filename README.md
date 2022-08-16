@@ -76,7 +76,7 @@ NOTE: When created, accounts have no funds.
 #### Request (No payload):
 
 ```
-POST /account/create
+POST /account
 ```
 
 #### Response (JSON):

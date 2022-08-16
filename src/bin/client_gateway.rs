@@ -151,7 +151,7 @@ fn bearer_token(request: &Request) -> Option<&str> {
 }
 
 fn root_handler(_request: &Request) -> Response {
-    Response::text("CapyCoin Gateway!")
+    Response::html("<h1>CapyCoin Gateway!</h1><p><a href='https://github.com/lmartinking/capycoin/blob/master/README.md'>Documentation</a></p>")
 }
 
 fn create_account_handler(request: &Request) -> Response {

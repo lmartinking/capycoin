@@ -9,9 +9,8 @@ use std::os::unix::io::AsRawFd;
 
 use std::process;
 
-use crate::message::{ClientMessage, ServerMessage, ServerMessagePacket};
 use crate::common;
-
+use crate::message::{ClientMessage, ServerMessage, ServerMessagePacket};
 
 lazy_static! {
     static ref START_TIME: Instant = Instant::now();

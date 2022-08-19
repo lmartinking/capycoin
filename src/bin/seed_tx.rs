@@ -4,9 +4,8 @@ use std::str::FromStr;
 use capycoin::message::ServerMessage;
 use uuid::Uuid;
 
-use capycoin::{client_util, message::ClientMessage};
 use capycoin::account::seed_account_id;
-
+use capycoin::{client_util, message::ClientMessage};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -25,17 +24,21 @@ fn main() {
     }
 
     let seed_account_id = seed_account_id();
-    let msg = ClientMessage::CreateTransaction { sender_id: seed_account_id, receiver_id: rx_account, amount: amount };
+    let msg = ClientMessage::CreateTransaction {
+        sender_id: seed_account_id,
+        receiver_id: rx_account,
+        amount: amount,
+    };
 
     let resp = client_util::send_and_recv_msg(msg).expect("Expected a response from core!");
 
     match resp {
         ServerMessage::CreateTransactionResponse(Ok(r)) => {
             println!("Transaction receipt: {:?}", r)
-        },
+        }
         ServerMessage::CreateTransactionResponse(Err(err)) => {
             eprintln!("Transaction error: {:?}", err)
-        },
-        _ => panic!("Unexpected response from server!")
+        }
+        _ => panic!("Unexpected response from server!"),
     }
 }

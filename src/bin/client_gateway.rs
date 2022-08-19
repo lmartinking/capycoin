@@ -16,9 +16,8 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use capycoin::auth;
-use capycoin::message::{ClientMessage, ServerError, ServerMessage};
 use capycoin::client_util::send_and_recv_msg;
-
+use capycoin::message::{ClientMessage, ServerError, ServerMessage};
 
 fn gateway_error(message: &str) -> ServerError {
     ServerError {
@@ -46,7 +45,9 @@ fn bearer_token(request: &Request) -> Option<&str> {
 }
 
 fn root_handler(_request: &Request) -> Response {
-    Response::html("<h1>CapyCoin Gateway!</h1><p><a href='https://github.com/lmartinking/capycoin/blob/master/README.md'>Documentation</a></p>")
+    Response::html(
+        "<h1>CapyCoin Gateway!</h1><p><a href='https://github.com/lmartinking/capycoin/blob/master/README.md'>Documentation</a></p>",
+    )
 }
 
 fn create_account_handler(request: &Request) -> Response {

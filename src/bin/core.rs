@@ -156,6 +156,10 @@ fn message_dispatch(con: &mut rusqlite::Connection, message: &ClientMessagePacke
             let result = account::load_account(con, &account_id);
             result.into()
         }
+        ClientMessage::GetAccounts => {
+            let result = account::get_accounts(con);
+            result.into()
+        }
         ClientMessage::GetTransactions {
             account_id,
             time_range_start,

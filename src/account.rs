@@ -165,6 +165,23 @@ pub fn load_account(con: &mut Connection, account_id: &Uuid) -> Result<Account, 
     Ok(account)
 }
 
+pub fn get_accounts(con: &mut Connection) -> Result<Vec<Account>, AccountError> {
+    let mut tx: Vec<Account> = Vec::new();
+
+    let mut stmt = con.prepare("SELECT account_id, created, funds FROM accounts")?;
+    let mut rows = stmt.query(params![])?;
+
+    while let Some(row) = rows.next()? {
+        tx.push(Account {
+            account_id: row.get(0)?,
+            created: row.get(1)?,
+            funds: row.get(2)?,
+        });
+    }
+
+    Ok(tx)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -253,5 +270,32 @@ mod tests {
         let account_id = Uuid::new_v4();
         let err = load_account(&mut con, &account_id).expect_err("should not allow loading an unknown account");
         assert_eq!(err, AccountError::AccountDoesNotExist);
+    }
+
+    #[test]
+    fn test_get_accounts_none() {
+        let mut con = rusqlite::Connection::open_in_memory().unwrap();
+        create_accounts_table(&mut con).unwrap();
+
+        let accts = get_accounts(&mut con).unwrap();
+        assert_eq!(accts.len(), 0);
+    }
+
+    #[test]
+    fn test_get_accounts() {
+        let mut con = rusqlite::Connection::open_in_memory().unwrap();
+        create_accounts_table(&mut con).unwrap();
+
+        let a1 = Account::new();
+        save_account(&mut con, &a1).unwrap();
+
+        let a2 = Account::new();
+        save_account(&mut con, &a2).unwrap();
+
+        let accts = get_accounts(&mut con).unwrap();
+        assert_eq!(accts.len(), 2);
+
+        assert_eq!(a1, accts[0]);
+        assert_eq!(a2, accts[1]);
     }
 }

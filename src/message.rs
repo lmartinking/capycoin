@@ -15,6 +15,8 @@ pub enum ClientMessage {
         account_id: Uuid,
     },
 
+    GetAccounts,
+
     GetTransactions {
         account_id: Uuid,
         time_range_start: OffsetDateTime,
@@ -50,6 +52,7 @@ pub struct ServerError {
 pub enum ServerMessage {
     CreateNewAccountResponse(Result<AccountCreatedResult, ServerError>),
     GetAccountResponse(Result<Account, ServerError>),
+    GetAccountsResponse(Result<Vec<Account>, ServerError>),
     GetTransactionsResponse(Result<Vec<Transaction>, ServerError>),
     GetTransactionResponse(Result<Transaction, ServerError>),
     CreateTransactionResponse(Result<TransactionReceipt, ServerError>),
@@ -213,6 +216,16 @@ impl From<Result<Account, AccountError>> for ServerMessage {
         match result {
             Ok(r) => ServerMessage::GetAccountResponse(Ok(r)),
             Err(e) => ServerMessage::GetAccountResponse(Err(e.into())),
+        }
+    }
+}
+
+// GetAccountsResponse
+impl From<Result<Vec<Account>, AccountError>> for ServerMessage {
+    fn from(result: Result<Vec<Account>, AccountError>) -> Self {
+        match result {
+            Ok(r) => ServerMessage::GetAccountsResponse(Ok(r)),
+            Err(e) => ServerMessage::GetAccountsResponse(Err(e.into())),
         }
     }
 }
